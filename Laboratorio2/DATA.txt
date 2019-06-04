@@ -1,0 +1,8 @@
+b'hola'
+b'javier'
+b'prueba'
+b'guardando en txt'
+b'linea por linea'
+b'nuevo intento a ver si sobre escribe.'
+b'todo perfecto. Congratulations!'
+b'hola'
