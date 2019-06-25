@@ -1,0 +1,54 @@
+from constants import *
+from pickle import *
+from socket import *
+
+def create_socket(address, port):
+    # IMPLEMENTAR
+    UDPsocket=socket(AF_INET, SOCK_DGRAM)
+    UDPsocket.bind((address, port))
+    return UDPsocket
+
+def print_message(message):
+    print (message)
+
+def extract(packet):
+    # IMPLEMENTAR
+    datas = packet.get_data()
+    return datas
+
+def rdt_rcv(sock):
+    # IMPLEMENTAR
+    packet, address = UDPsocket.loads(sock.recv(2048))
+    return packet, address
+
+def deliver_data(UDPsocket, datas, address):
+    # IMPLEMENTAR
+    UDPsocket.sendto(datas.encode('utf-8'), address)
+
+def close_socket(socket, signal, frame):
+    print ("\rCerrando socket")
+    socket.close()
+    exit(0)
+
+
+if __name__ == "__main__":
+    # Creamos el socket "receiver"
+    receptor= create_UDPsocket(RECEIVER_IP, RECEIVER_PORT)
+    print('receptor corriendo')
+    # Registramos la senial de salida
+    signal.signal(signal.SIGINT, partial(close_socket, receiver))
+    # Imprimimos el cartel "Listo para recibir mensajes..."
+    
+    # Iteramos indefinidamente
+    while True:
+        # Recibimos un paquete de la red
+        packet, address = rdt_rcv(receptor, 2048)
+        # Extraemos los datos
+        datas = extract(packet)
+        # Entregamos los datos a la capa de aplicacion
+        modifiedDatas = datas.encode('utf-8')
+        deliver_data(receptor, modifiedDatas, address)#4
+        archivo = open('DATA.txt', 'a') # a: anexa
+        archivo.write(str(datas)+'\n')
+        archivo.close()
+    close_socket(receptor)
